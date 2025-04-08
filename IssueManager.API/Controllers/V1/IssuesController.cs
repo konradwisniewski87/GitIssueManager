@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IssueManager.API.Controllers;
 
 [ApiController]
-[Route("api/issues/{provider}/{repo}")]
+[Route("api/issues")]
 public class IssuesController : ControllerBase
 {
     private readonly IIssueServiceFactory _serviceFactory;
@@ -15,15 +15,16 @@ public class IssuesController : ControllerBase
         _serviceFactory = serviceFactory;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateIssue(string provider, string repo, [FromBody] IssueRequest request)
+    [HttpPost("{provider}/{owner}/{repo}")]
+    public async Task<IActionResult> CreateIssue(string provider, string owner, string repo, [FromBody] IssueRequest request)
     {
+        var fullRepo = $"{owner}/{repo}";
         var service = _serviceFactory.GetService(provider);
-        var response = await service.CreateIssueAsync(repo, request);
+        var response = await service.CreateIssueAsync(fullRepo, request);
         return Ok(response);
     }
 
-    [HttpPut("{issueId:int}")]
+    [HttpPut("{provider}/{owner}/{repo}/{issueId:int}")]
     public async Task<IActionResult> UpdateIssue(string provider, string repo, int issueId, [FromBody] IssueRequest request)
     {
         var service = _serviceFactory.GetService(provider);
@@ -31,7 +32,7 @@ public class IssuesController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPatch("{issueId:int}/close")]
+    [HttpPatch("{provider}/{owner}/{repo}/{issueId:int}/close")]
     public async Task<IActionResult> CloseIssue(string provider, string repo, int issueId)
     {
         var service = _serviceFactory.GetService(provider);
