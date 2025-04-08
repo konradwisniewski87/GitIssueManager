@@ -35,8 +35,8 @@ In the `IssueManager.API` project, open the `appsettings.json` file and add your
   }
 }
 
-
 ---
+
 How to start program without for example Visual Studio
 ![Running .NET](README_pictures/dotnetRun.png)
 
