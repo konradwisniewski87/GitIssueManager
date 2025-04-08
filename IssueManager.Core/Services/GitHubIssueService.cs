@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using IssueManager.Core.Services.Helpers;
-using IssueManager.Core.Models.Helpers;
 
 namespace IssueManager.Core.Services;
 
@@ -74,14 +73,9 @@ public class GitHubIssueService : IIssueService
         {
             Id = githubIssue!.Number,
             Title = githubIssue.Title,
-            State = MapState(githubIssue.State),
+            State = HelpersMethod.MapState(githubIssue.State),
             Url = githubIssue.HtmlUrl
         };
-    }
-
-    private IssueState MapState(string state)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task CloseIssueAsync(string repository, int issueId)
