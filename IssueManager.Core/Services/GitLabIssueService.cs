@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using IssueManager.Core.Interfaces;
 using IssueManager.Core.Models;
+using IssueManager.Core.Models.Helpers;
 using IssueManager.Core.Services.Helpers;
 
 namespace IssueManager.Core.Services;
@@ -78,6 +79,11 @@ public class GitLabIssueService : IIssueService
             State = MapState(gitlabIssue.State),
             Url = gitlabIssue.WebUrl
         };
+    }
+
+    private IssueState MapState(string state)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task CloseIssueAsync(string repository, int issueId)
