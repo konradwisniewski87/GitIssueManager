@@ -34,3 +34,9 @@ In the `IssueManager.API` project, open the `appsettings.json` file and add your
     "Token": "glpat_your_gitlab_token"
   }
 }
+
+
+---
+How to start program without for example Visual Studio
+![Running .NET](README_pictures/dotnetRun.png)
+
