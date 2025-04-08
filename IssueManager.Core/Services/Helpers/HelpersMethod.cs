@@ -6,7 +6,7 @@ internal static class HelpersMethod
 {
     internal static IssueState MapState(string state) => state.ToLower() switch
     {
-        "opened" => IssueState.Open,
+        "open" => IssueState.Open,
         "closed" => IssueState.Closed,
         _ => throw new InvalidOperationException($"Unknown Git issue state: {state}")
     };
