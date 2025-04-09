@@ -25,18 +25,20 @@ public class IssuesController : ControllerBase
     }
 
     [HttpPut("{provider}/{owner}/{repo}/{issueId:int}")]
-    public async Task<IActionResult> UpdateIssue(string provider, string repo, int issueId, [FromBody] IssueRequest request)
+    public async Task<IActionResult> UpdateIssue(string provider, string owner, string repo, int issueId, [FromBody] IssueRequest request)
     {
+        var fullRepo = $"{owner}/{repo}";
         var service = _serviceFactory.GetService(provider);
-        var response = await service.UpdateIssueAsync(repo, issueId, request);
+        var response = await service.UpdateIssueAsync(fullRepo, issueId, request);
         return Ok(response);
     }
 
     [HttpPatch("{provider}/{owner}/{repo}/{issueId:int}/close")]
-    public async Task<IActionResult> CloseIssue(string provider, string repo, int issueId)
+    public async Task<IActionResult> CloseIssue(string provider, string owner, string repo, int issueId)
     {
+        var fullRepo = $"{owner}/{repo}";
         var service = _serviceFactory.GetService(provider);
-        await service.CloseIssueAsync(repo, issueId);
+        await service.CloseIssueAsync(fullRepo, issueId);
         return NoContent();
     }
 }
