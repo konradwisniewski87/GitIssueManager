@@ -11,7 +11,7 @@ internal static class HelpersMethod
 
         return state.ToLower() switch
         {
-            "open" => IssueState.Open,
+            "open" or "opened" => IssueState.Open,
             "closed" => IssueState.Closed,
             _ => throw new InvalidOperationException($"Unknown Git issue state: {state}")
         };
