@@ -11,6 +11,8 @@ public class GitLabIssueService : IIssueService
 {
     private readonly HttpClient _httpClient;
     private readonly string _token;
+    private readonly string _accept = "application/json";
+    private readonly string _contentType = "application/json";
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -23,11 +25,11 @@ public class GitLabIssueService : IIssueService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
         _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("IssueManagerApp");
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_accept));
     }
 
     public async Task<IssueResponse> CreateIssueAsync(string repository, IssueRequest issue)
     {
-        // repository = namespace/project, np. "group-name/repo-name"
         var encodedRepo = Uri.EscapeDataString(repository);
         var url = $"https://gitlab.com/api/v4/projects/{encodedRepo}/issues";
 
@@ -37,7 +39,7 @@ public class GitLabIssueService : IIssueService
             description = issue.Description
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
+        var content = CreateJsonContent(payload);
         var response = await _httpClient.PostAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -64,7 +66,7 @@ public class GitLabIssueService : IIssueService
             description = issue.Description
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
+        var content = CreateJsonContent(payload);
         var response = await _httpClient.PutAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -90,14 +92,19 @@ public class GitLabIssueService : IIssueService
             state_event = "close"
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
+        var content = CreateJsonContent(payload);
         var response = await _httpClient.PutAsync(url, content);
         response.EnsureSuccessStatusCode();
     }
 
+    private StringContent CreateJsonContent(object payload)
+    {
+        return new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, _contentType);
+    }
+
     private class GitLabIssueDto
     {
-        public int Iid { get; set; } // NOT "id" - "iid" is the issue number within project
+        public int Iid { get; set; }
         public string Title { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public string WebUrl { get; set; } = string.Empty;

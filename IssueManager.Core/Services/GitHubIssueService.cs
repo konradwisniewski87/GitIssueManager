@@ -11,6 +11,9 @@ public class GitHubIssueService : IIssueService
 {
     private readonly HttpClient _httpClient;
     private readonly string _token;
+    private readonly string _accept = "application/vnd.github+json";
+    private readonly string _contentType = "application/json";
+    private readonly string _apiVersion = "2022-11-28";
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -23,7 +26,8 @@ public class GitHubIssueService : IIssueService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
         _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("IssueManagerApp");
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_accept));
+        _httpClient.DefaultRequestHeaders.Add("X-GitHub-Api-Version", _apiVersion);
     }
 
     public async Task<IssueResponse> CreateIssueAsync(string repository, IssueRequest issue)
@@ -36,7 +40,7 @@ public class GitHubIssueService : IIssueService
             body = issue.Description
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
+        var content = CreateJsonContent(payload);
         var response = await _httpClient.PostAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -62,7 +66,7 @@ public class GitHubIssueService : IIssueService
             body = issue.Description
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
+        var content = CreateJsonContent(payload);
         var response = await _httpClient.PatchAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -87,9 +91,14 @@ public class GitHubIssueService : IIssueService
             state = "closed"
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PatchAsync(url, content); // <- rozszerzenie
+        var content = CreateJsonContent(payload);
+        var response = await _httpClient.PatchAsync(url, content);
         response.EnsureSuccessStatusCode();
+    }
+
+    private StringContent CreateJsonContent(object payload)
+    {
+        return new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, _contentType);
     }
 
     private class GitHubIssueDto
