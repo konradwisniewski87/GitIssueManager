@@ -1,4 +1,5 @@
 ﻿using IssueManager.Core.Interfaces;
+using IssueManager.Core.Models.Enums;
 
 namespace IssueManager.Core.Services;
 
@@ -13,13 +14,13 @@ public class IssueServiceFactory : IIssueServiceFactory
         _gitLabService = gitLabService;
     }
 
-    public IIssueService GetService(string provider)
+    public IIssueService GetService(IssueServiceType type)
     {
-        return provider.ToLower() switch
+        return type switch
         {
-            "github" => _gitHubService,
-            "gitlab" => _gitLabService,
-            _ => throw new ArgumentException("Unsupported provider", nameof(provider))
+            IssueServiceType.GitHub => _gitHubService,
+            IssueServiceType.GitLab => _gitLabService,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported provider: {type}")
         };
     }
 }

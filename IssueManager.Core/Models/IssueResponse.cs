@@ -1,4 +1,4 @@
-﻿using IssueManager.Core.Models.Helpers;
+﻿using IssueManager.Core.Models.Enums;
 
 namespace IssueManager.Core.Models;
 
