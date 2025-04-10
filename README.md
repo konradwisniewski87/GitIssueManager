@@ -81,6 +81,6 @@ to match your GitHub setup.
 ![Build Status](https://github.com/konradwisniewski87/GitIssueManager/actions/workflows/ci.yml/badge.svg)
 
 
-Automated tests are triggered on every commit and pull request to the `main` and `develop` branches using GitHub Actions.
+Automated tests are triggered on every commit and pull request to the `main` and `develop` branches using GitHub Actions and xUnit tests.
 
 ---
