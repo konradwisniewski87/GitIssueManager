@@ -40,7 +40,7 @@ public class GitHubIssueService : IIssueService
             body = issue.Description
         };
 
-        var content = CreateJsonContent(payload);
+        var content = JsonContentHelper.Create(payload);
         var response = await _httpClient.PostAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -66,7 +66,7 @@ public class GitHubIssueService : IIssueService
             body = issue.Description
         };
 
-        var content = CreateJsonContent(payload);
+        var content = JsonContentHelper.Create(payload);
         var response = await _httpClient.PatchAsync(url, content);
         response.EnsureSuccessStatusCode();
 
@@ -91,14 +91,9 @@ public class GitHubIssueService : IIssueService
             state = "closed"
         };
 
-        var content = CreateJsonContent(payload);
+        var content = JsonContentHelper.Create(payload);
         var response = await _httpClient.PatchAsync(url, content);
         response.EnsureSuccessStatusCode();
-    }
-
-    private StringContent CreateJsonContent(object payload)
-    {
-        return new StringContent(JsonSerializer.Serialize(payload, _jsonOptions), Encoding.UTF8, _contentType);
     }
 
     private class GitHubIssueDto
