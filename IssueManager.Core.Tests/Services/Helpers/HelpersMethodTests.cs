@@ -1,4 +1,4 @@
-﻿using IssueManager.Core.Models.Helpers;
+﻿using IssueManager.Core.Models.Enums;
 using IssueManager.Core.Services.Helpers;
 
 namespace IssueManager.Tests.Helpers;

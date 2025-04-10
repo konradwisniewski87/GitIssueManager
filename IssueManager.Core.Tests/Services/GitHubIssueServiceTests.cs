@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using IssueManager.Core.Models;
-using IssueManager.Core.Models.Helpers;
+using IssueManager.Core.Models.Enums;
 using IssueManager.Core.Services;
 using Moq;
 using Moq.Protected;

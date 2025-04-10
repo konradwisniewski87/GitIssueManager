@@ -1,4 +1,4 @@
-﻿namespace IssueManager.Core.Models.Helpers;
+﻿namespace IssueManager.Core.Models.Enums;
 
 public enum IssueState
 {
