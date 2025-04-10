@@ -5,6 +5,7 @@ using FluentAssertions;
 using IssueManager.Core.Models;
 using IssueManager.Core.Models.Enums;
 using IssueManager.Core.Services;
+using IssueManager.Core.Services.Helpers;
 using Moq;
 using Moq.Protected;
 
@@ -56,10 +57,10 @@ public class GitHubIssueServiceTests
         var result = await service.CreateIssueAsync("example/repo", request);
 
         // Assert
-        Assert.Equal(123, result.Id);
-        Assert.Equal("Test title", result.Title);
+        Assert.Equal(githubResponse.number, result.Id);
+        Assert.Equal(githubResponse.title, result.Title);
         Assert.Equal(IssueState.Open, result.State);
-        Assert.Equal("https://github.com/example/repo/issues/123", result.Url);
+        Assert.Equal(githubResponse.htmlUrl, result.Url);
     }
 
     [Theory]
@@ -145,7 +146,7 @@ public class GitHubIssueServiceTests
         var result = await service.CreateIssueAsync("example/repo", request);
 
         // Assert
-        Assert.Equal(1, result.Id);
+        Assert.Equal(githubResponse.number, result.Id);
         Assert.Null(result.Title);
         Assert.Equal(IssueState.Closed, result.State);
     }
@@ -159,8 +160,9 @@ public class GitHubIssueServiceTests
             number = 321,
             title = "Updated title",
             state = "closed",
-            html_url = "https://github.com/example/repo/issues/321"
+            htmlUrl = "https://github.com/example/repo/issues/321"
         };
+
 
         var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
         {
@@ -174,10 +176,10 @@ public class GitHubIssueServiceTests
         var result = await service.UpdateIssueAsync("example/repo", 321, request);
 
         // Assert
-        result.Id.Should().Be(321);
-        result.Title.Should().Be("Updated title");
-        result.State.Should().Be(IssueState.Closed);
-        result.Url.Should().Be("https://github.com/example/repo/issues/321");
+        result.Id.Should().Be(githubResponse.number);
+        result.Title.Should().Be(githubResponse.title);
+        result.State.Should().Be(HelpersMethod.MapState(githubResponse.state));
+        result.Url.Should().Be(githubResponse.htmlUrl);
     }
 
     [Fact]
