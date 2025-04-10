@@ -43,3 +43,36 @@ In the `IssueManager.API` project, open the `appsettings.json` file and add your
 ![Running .NET](./README_pictures/dotnetRun.png)
 
 ---
+
+### 🚀 Using the API with Postman
+
+The `Postman` directory contains a collection file:  
+`GitIssueManager.postman_collection.json`  
+
+#### Steps to import the collection:
+
+1. Open Postman.
+2. Go to *Collections* → *Import*.
+3. Select the file:  
+   `/Postman/GitIssueManager.postman_collection.json`
+
+#### Example: Importing a Collection in Postman  
+![Postman import collection](./README_pictures/Import_Collection.png)
+
+---
+
+### 🔧 Configuring Requests
+
+After importing the collection, select a request you want to test (e.g., *Create Issue in GitHub*).
+
+Update the required parameters in the request, such as:
+- `Account Name`
+- `Project Name`
+
+to match your GitHub setup.
+
+#### Example: Editing Variables in Request  
+![Modify account name and project name](./README_pictures/PartsOfLink.png)
+
+---
+
