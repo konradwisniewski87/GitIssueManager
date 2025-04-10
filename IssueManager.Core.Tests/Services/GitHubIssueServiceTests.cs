@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using FluentAssertions;
 using IssueManager.Core.Models;
 using IssueManager.Core.Models.Enums;
 using IssueManager.Core.Services;
@@ -81,7 +82,7 @@ public class GitHubIssueServiceTests
     public async Task CreateIssueAsync_WhenMissingFieldsInJson_ThrowsJsonException()
     {
         // Arrange
-        var brokenJson = "{\"number\":123,\"title\":\"Test title\"}"; // brak "state"
+        var brokenJson = "{\"number\":123,\"title\":\"Test title\"}";
         var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(brokenJson, Encoding.UTF8, "application/vnd.github+json")
@@ -103,7 +104,7 @@ public class GitHubIssueServiceTests
         {
             number = 123,
             title = "Test title",
-            state = "in_progress", // nieznany stan
+            state = "in_progress", // unknown state
             html_url = "https://github.com/example/repo/issues/123"
         };
 
@@ -147,5 +148,50 @@ public class GitHubIssueServiceTests
         Assert.Equal(1, result.Id);
         Assert.Null(result.Title);
         Assert.Equal(IssueState.Closed, result.State);
+    }
+
+    [Fact]
+    public async Task UpdateIssueAsync_WhenSuccess_ReturnsCorrectIssueResponse()
+    {
+        // Arrange
+        var githubResponse = new
+        {
+            number = 321,
+            title = "Updated title",
+            state = "closed",
+            html_url = "https://github.com/example/repo/issues/321"
+        };
+
+        var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(githubResponse), Encoding.UTF8, "application/vnd.github+json")
+        };
+
+        var service = CreateService(httpResponse);
+        var request = new IssueRequest { Title = "Updated title", Description = "Updated description" };
+
+        // Act
+        var result = await service.UpdateIssueAsync("example/repo", 321, request);
+
+        // Assert
+        result.Id.Should().Be(321);
+        result.Title.Should().Be("Updated title");
+        result.State.Should().Be(IssueState.Closed);
+        result.Url.Should().Be("https://github.com/example/repo/issues/321");
+    }
+
+    [Fact]
+    public async Task CloseIssueAsync_WhenSuccess_DoesNotThrow()
+    {
+        // Arrange
+        var httpResponse = new HttpResponseMessage(HttpStatusCode.OK);
+
+        var service = CreateService(httpResponse);
+
+        // Act
+        var act = async () => await service.CloseIssueAsync("example/repo", 555);
+
+        // Assert
+        await act.Should().NotThrowAsync();
     }
 }
