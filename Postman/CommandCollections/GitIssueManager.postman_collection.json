@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "3a9879a7-4ffa-45c6-85eb-59491f27c744",
+		"name": "GitIssueManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22312165"
+	},
+	"item": [
+		{
+			"name": "GitHub",
+			"item": [
+				{
+					"name": "Create Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Probablu id 13. Bug: something is broken\",\r\n  \"description\": \"Steps to reproduce:\\n1. Click X\\n2. Boom\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5002/api/issues/github/konradwisniewski87/DesignPatterns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"github",
+								"konradwisniewski87",
+								"DesignPatterns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Updated title from Postman4\",\r\n  \"description\": \"This issue was updated using Postman at 17:00.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5002/api/issues/github/konradwisniewski87/DesignPatterns/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"github",
+								"konradwisniewski87",
+								"DesignPatterns",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5002/api/issues/github/konradwisniewski87/DesignPatterns/13/close",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"github",
+								"konradwisniewski87",
+								"DesignPatterns",
+								"13",
+								"close"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GitLab",
+			"item": [
+				{
+					"name": "Create Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Bug: something is broken1\",\r\n  \"description\": \"Steps to reproduce:\\n1. Click X\\n2. Boom\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5002/api/issues/gitlab/WKonrad/DesignPatterns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"gitlab",
+								"WKonrad",
+								"DesignPatterns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Updated title from Postman4\",\r\n  \"description\": \"This issue was updated using Postman at 17:00.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5002/api/issues/gitlab/WKonrad/DesignPatterns/14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"gitlab",
+								"WKonrad",
+								"DesignPatterns",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Issue",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5002/api/issues/gitlab/WKonrad/DesignPatterns/15/close",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"issues",
+								"gitlab",
+								"WKonrad",
+								"DesignPatterns",
+								"15",
+								"close"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
