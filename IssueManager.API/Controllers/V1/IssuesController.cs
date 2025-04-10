@@ -1,6 +1,6 @@
-﻿using IssueManager.Core.Interfaces;
+﻿using IssueManager.API.Controllers.V1.Helpers;
+using IssueManager.Core.Interfaces;
 using IssueManager.Core.Models;
-using IssueManager.Core.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueManager.API.Controllers;
@@ -19,11 +19,9 @@ public class IssuesController : ControllerBase
     [HttpPost("{provider}/{owner}/{repo}")]
     public async Task<IActionResult> CreateIssue(string provider, string owner, string repo, [FromBody] IssueRequest request)
     {
-        if (!TryGetServiceType(provider, out var serviceType))
-            return BadRequest("Invalid provider. Allowed values: GitHub, GitLab");
+        if (!IssueServiceHelper.TryGetServiceAndRepo(_serviceFactory, provider, owner, repo, out var service, out var fullRepo, out var errorResult))
+            return errorResult;
 
-        var fullRepo = $"{owner}/{repo}";
-        var service = _serviceFactory.GetService(serviceType);
         var response = await service.CreateIssueAsync(fullRepo, request);
         return Ok(response);
     }
@@ -31,11 +29,9 @@ public class IssuesController : ControllerBase
     [HttpPut("{provider}/{owner}/{repo}/{issueId:int}")]
     public async Task<IActionResult> UpdateIssue(string provider, string owner, string repo, int issueId, [FromBody] IssueRequest request)
     {
-        if (!TryGetServiceType(provider, out var serviceType))
-            return BadRequest("Invalid provider. Allowed values: GitHub, GitLab");
+        if (!IssueServiceHelper.TryGetServiceAndRepo(_serviceFactory, provider, owner, repo, out var service, out var fullRepo, out var errorResult))
+            return errorResult;
 
-        var fullRepo = $"{owner}/{repo}";
-        var service = _serviceFactory.GetService(serviceType);
         var response = await service.UpdateIssueAsync(fullRepo, issueId, request);
         return Ok(response);
     }
@@ -43,17 +39,10 @@ public class IssuesController : ControllerBase
     [HttpPatch("{provider}/{owner}/{repo}/{issueId:int}/close")]
     public async Task<IActionResult> CloseIssue(string provider, string owner, string repo, int issueId)
     {
-        if (!TryGetServiceType(provider, out var serviceType))
-            return BadRequest("Invalid provider. Allowed values: GitHub, GitLab");
+        if (!IssueServiceHelper.TryGetServiceAndRepo(_serviceFactory, provider, owner, repo, out var service, out var fullRepo, out var errorResult))
+            return errorResult;
 
-        var fullRepo = $"{owner}/{repo}";
-        var service = _serviceFactory.GetService(serviceType);
         await service.CloseIssueAsync(fullRepo, issueId);
         return NoContent();
-    }
-
-    private bool TryGetServiceType(string provider, out IssueServiceType serviceType)
-    {
-        return Enum.TryParse(provider, ignoreCase: true, out serviceType);
     }
 }
