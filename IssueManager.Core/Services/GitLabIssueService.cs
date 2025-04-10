@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using IssueManager.Core.Interfaces;
 using IssueManager.Core.Models;
 using IssueManager.Core.Services.Helpers;
@@ -107,6 +108,7 @@ public class GitLabIssueService : IIssueService
         public int Iid { get; set; }
         public string Title { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
+        [JsonPropertyName("web_url")]
         public string WebUrl { get; set; } = string.Empty;
     }
 }
