@@ -14,4 +14,9 @@
     <InternalsVisibleTo Include="IssueManager.API.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+  </ItemGroup>
+
 </Project>
