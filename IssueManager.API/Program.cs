@@ -8,6 +8,8 @@ builder.Services.AddHttpClient();
 
 // Add services to the container.
 //Registration GitHubIssueService
+
+builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GitHubIssueService>(provider =>
     new GitHubIssueService(
         provider.GetRequiredService<IHttpClientFactory>().CreateClient(),
@@ -31,6 +33,13 @@ var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestTimeLoggingMiddleware>();
 app.UseSerilogRequestLogging();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
