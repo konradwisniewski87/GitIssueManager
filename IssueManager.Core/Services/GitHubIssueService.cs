@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using IssueManager.Core.Services.Helpers;
+using System.Net;
 
 namespace IssueManager.Core.Services;
 
@@ -68,10 +69,18 @@ public class GitHubIssueService : IIssueService
 
         var content = CreateJsonContent(payload);
         var response = await _httpClient.PatchAsync(url, content);
-        response.EnsureSuccessStatusCode();
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            throw new InvalidOperationException($"Issue #{issueId} not found in repository '{repository}'.");
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+            throw new UnauthorizedAccessException("Unauthorized. Please check your GitHub token.");
+
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"GitHub returned an error: {(int)response.StatusCode} {response.ReasonPhrase}");
 
         var json = await response.Content.ReadAsStringAsync();
-        var githubIssue = JsonSerializer.Deserialize<GitHubIssueDto>(json, _jsonOptions);
+        var githubIssue = JsonSerializer.Deserialize<GitHubIssueDto>(json, _jsonOptions)!;
 
         return new IssueResponse
         {
@@ -81,6 +90,7 @@ public class GitHubIssueService : IIssueService
             Url = githubIssue.HtmlUrl
         };
     }
+
 
     public async Task CloseIssueAsync(string repository, int issueId)
     {
