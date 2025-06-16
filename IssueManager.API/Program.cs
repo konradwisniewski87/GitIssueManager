@@ -10,6 +10,8 @@ builder.Services.AddHttpClient();
 //Registration GitHubIssueService
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 builder.Services.AddSingleton<GitHubIssueService>(provider =>
     new GitHubIssueService(
         provider.GetRequiredService<IHttpClientFactory>().CreateClient(),
@@ -26,6 +28,10 @@ builder.Services.AddSingleton<GitLabIssueService>(provider =>
 builder.Services.AddSingleton<IIssueServiceFactory, IssueServiceFactory>();
 
 builder.Services.AddControllers();
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 var app = builder.Build();
 
