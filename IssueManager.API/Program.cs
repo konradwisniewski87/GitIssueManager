@@ -1,5 +1,7 @@
+using IssueManager.API.Middleware;
 using IssueManager.Core.Interfaces;
 using IssueManager.Core.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
@@ -26,7 +28,9 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<IssueManager.API.Middleware.ErrorHandlingMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeLoggingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
